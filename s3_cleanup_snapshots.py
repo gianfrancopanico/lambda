@@ -23,5 +23,4 @@ def lambda_handler(event, context):
             
             if snap_date<cut_date:
                 # exterminate
-                 print "*** " + inst_id + " marked for deletion [" + snap_date + " < " + cut_date + "]"
-        
+                print "*** " + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
