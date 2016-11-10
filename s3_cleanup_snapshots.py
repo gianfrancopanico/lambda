@@ -11,15 +11,17 @@ def lambda_handler(event, context):
         'DBSnapshots',[] 
         )
         
-    rdblist = len(rdb)
-    print "Found ", rdblist, " snapshots"    
-    cut_date=datetime.datetime.now()-datetime.timedelta(days=15)
+    #rdblist = len(rdb)
+    #print "Found ", rdblist, " snapshots"    
+    
+    # compute the cut-off time for snapshots
+    cut_date=datetime.datetime.now()-datetime.timedelta(days=1)
         
     for dbsnaps in rdb:
             inst_id=dbsnaps['DBSnapshotIdentifier']
-            inst_timestamp=dbsnaps['SnapshotCreateTime']
-            snap_date=datetime.datetime.strptime(str(inst_timestamp), "20%y-%m-%d %h:%m:%s.%c+")
-            # if inst_timestamp<cut_date: 
-            #    print "***" 
-            print inst_id, snap_date, cut_date
+            snap_date=datetime.datetime.strptime(str(dbsnaps['SnapshotCreateTime'])[:19], "%Y-%m-%d %H:%M:%S")
+            
+            if snap_date<cut_date:
+                # exterminate
+                 print "*** " + inst_id + " marked for deletion [" + snap_date + " < " + cut_date + "]"
         
