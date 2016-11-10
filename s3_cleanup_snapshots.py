@@ -22,7 +22,8 @@ def lambda_handler(event, context):
             snap_date=datetime.datetime.strptime(str(dbsnaps['SnapshotCreateTime'])[:19], "%Y-%m-%d %H:%M:%S")
             
             if snap_date<cut_date:
-                # exterminate
+                # add here a tag-check test like
+                # if !tag=="keep alive signed:user@sainsburys": exterminate
                 print "*** " + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
                 rdscon.delete_db_snapshot(
                     DBSnapshotIdentifier=inst_id
