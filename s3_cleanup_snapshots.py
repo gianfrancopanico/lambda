@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     #rdblist = len(rdb)
     #print "Found ", rdblist, " snapshots"    
     
-    # compute the cut-off time for snapshots
+    # compute the cut-off time for snapshots (set days here!) 
     cut_date=datetime.datetime.now()-datetime.timedelta(days=15)
         
     for dbsnaps in rdb:
