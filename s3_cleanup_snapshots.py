@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     #print "Found ", rdblist, " snapshots"    
     
     # compute the cut-off time for snapshots
-    cut_date=datetime.datetime.now()-datetime.timedelta(days=1)
+    cut_date=datetime.datetime.now()-datetime.timedelta(days=15)
         
     for dbsnaps in rdb:
             inst_id=dbsnaps['DBSnapshotIdentifier']
@@ -24,3 +24,6 @@ def lambda_handler(event, context):
             if snap_date<cut_date:
                 # exterminate
                 print "*** " + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
+                rdscon.delete_db_snapshot(
+                    DBSnapshotIdentifier=inst_id
+                )
