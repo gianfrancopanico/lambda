@@ -2,8 +2,9 @@ import json
 import boto3
 
 def lambda_handler(event, context):
-    print ("Received event: " + json.dumps(event, indent=2))
-    print ("************************************************")
+    # Check out the code below whenever you need to analyse the json output from the event.
+    #print ("Received event: " + json.dumps(event, indent=2))
+    #print ("************************************************")
     
     ec2 = boto3.resource('ec2')
     
