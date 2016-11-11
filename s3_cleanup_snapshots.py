@@ -24,11 +24,12 @@ def lambda_handler(event, context):
                     ResourceName='arn:aws:rds:eu-west-1:108652351904:snapshot:'+inst_id,
                     Filters=[]
                     )
+                
                 # requires two tags to be present    
                 mvp=0
                 
                 for tag in response['TagList']:
-                   if tag['Key'] == 'Write-Protected':
+                   if tag['Key'] == 'Write-Protected' and tag['Value']=='True':
                        mvp=mvp+1
                    if tag['Key'] == 'Contact': 
                        mvp=mvp+1
