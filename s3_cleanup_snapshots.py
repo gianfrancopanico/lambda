@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         )
     
     # compute the cut-off time for snapshots
-    cut_date=datetime.datetime.now()-datetime.timedelta(days=1)
+    cut_date=datetime.datetime.now()-datetime.timedelta(days=15)
         
     for dbsnaps in rdb:
             inst_id=dbsnaps['DBSnapshotIdentifier']
@@ -24,7 +24,7 @@ def lambda_handler(event, context):
                     ResourceName='arn:aws:rds:eu-west-1:108652351904:snapshot:'+inst_id,
                     Filters=[]
                     )
-                    
+                # requires two tags to be present    
                 mvp=0
                 
                 for tag in response['TagList']:
@@ -32,11 +32,12 @@ def lambda_handler(event, context):
                        mvp=mvp+1
                    if tag['Key'] == 'Contact': 
                        mvp=mvp+1
-                       
-                if (mvp == 2):
+                
+                # if both tags are present, skip
+                if (mvp >= 2):
                     print "skipping "+inst_id 
                 else: 
-                    # exterminate
+                    # otherwise exterminate
                     print "*** arn:aws:rds:eu-west-1:108652351904:snapshot:" + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
                     # rdscon.delete_db_snapshot(DBSnapshotIdentifier=inst_id)
                  
