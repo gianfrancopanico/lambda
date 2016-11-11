@@ -4,27 +4,39 @@ import datetime
 import boto3
 
 def lambda_handler(event, context):
-    print ("Starting with RDS snapshots")
     
     rdscon = boto3.client('rds')
     rdb = rdscon.describe_db_snapshots().get(
         'DBSnapshots',[] 
         )
-        
-    #rdblist = len(rdb)
-    #print "Found ", rdblist, " snapshots"    
     
-    # compute the cut-off time for snapshots (set days here!) 
-    cut_date=datetime.datetime.now()-datetime.timedelta(days=15)
+    # compute the cut-off time for snapshots
+    cut_date=datetime.datetime.now()-datetime.timedelta(days=1)
         
     for dbsnaps in rdb:
             inst_id=dbsnaps['DBSnapshotIdentifier']
             snap_date=datetime.datetime.strptime(str(dbsnaps['SnapshotCreateTime'])[:19], "%Y-%m-%d %H:%M:%S")
             
             if snap_date<cut_date:
-                # add here a tag-check test like
-                # if !tag=="keep alive signed:user@sainsburys": exterminate
-                print "*** " + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
-                rdscon.delete_db_snapshot(
-                    DBSnapshotIdentifier=inst_id
-                )
+                # check tags first 
+                # testing <<< create tag to make snapshot undeleteable 
+                response = rdscon.list_tags_for_resource(
+                    ResourceName='arn:aws:rds:eu-west-1:108652351904:snapshot:'+inst_id,
+                    Filters=[]
+                    )
+                    
+                mvp=0
+                
+                for tag in response['TagList']:
+                   if tag['Key'] == 'Write-Protected':
+                       mvp=mvp+1
+                   if tag['Key'] == 'Contact': 
+                       mvp=mvp+1
+                       
+                if (mvp == 2):
+                    print "skipping "+inst_id 
+                else: 
+                    # exterminate
+                    print "*** arn:aws:rds:eu-west-1:108652351904:snapshot:" + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
+                    # rdscon.delete_db_snapshot(DBSnapshotIdentifier=inst_id)
+                 
