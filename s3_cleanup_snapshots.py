@@ -35,9 +35,8 @@ def lambda_handler(event, context):
                 
                 # if both tags are present, skip
                 if (mvp >= 2):
-                    print "skipping "+inst_id 
+                    print ">>> skipping arn:aws:rds:eu-west-1:108652351904:snapshot:"+inst_id 
                 else: 
                     # otherwise exterminate
-                    print "*** arn:aws:rds:eu-west-1:108652351904:snapshot:" + inst_id + " marked for deletion [" + str(snap_date)[:10] + " < " + str(cut_date)[:10] + "]"
-                    # rdscon.delete_db_snapshot(DBSnapshotIdentifier=inst_id)
-                 
+                    print "*** deleting arn:aws:rds:eu-west-1:108652351904:snapshot:" + inst_id 
+                    rdscon.delete_db_snapshot(DBSnapshotIdentifier=inst_id)
