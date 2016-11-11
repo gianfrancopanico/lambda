@@ -28,11 +28,11 @@ def lambda_handler(event, context):
                 ResourceName='arn:aws:rds:eu-west-1:108652351904:snapshot:'+snap_id,
                 Tags=[
                         {
-                            'Key': 'Write-Protected', 
-                            'Value': 'True'
+                            'Key': 'write-protected', 
+                            'Value': 'true'
                         },
                         {
-                            'Key': 'Contact',
+                            'Key': 'email',
                             'Value': 'infradev-leads@sainsburys.co.uk'
                         }
                      ]
