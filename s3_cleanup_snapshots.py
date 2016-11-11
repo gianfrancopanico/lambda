@@ -29,9 +29,9 @@ def lambda_handler(event, context):
                 mvp=0
                 
                 for tag in response['TagList']:
-                   if tag['Key'] == 'Write-Protected' and tag['Value']=='True':
+                   if tag['Key'] == 'write-protected' and tag['Value']=='true':
                        mvp=mvp+1
-                   if tag['Key'] == 'Contact': 
+                   if tag['Key'] == 'email': 
                        mvp=mvp+1
                 
                 # if both tags are present, skip
