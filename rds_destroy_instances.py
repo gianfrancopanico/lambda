@@ -14,8 +14,8 @@ def lambda_handler(event, context):
         )
         
     for dbinstance in rdb:
-            inst_id=dbinstance['DBInstanceIdentifier']
-            snap_id=(inst_id + "-20" + datetime.datetime.now().strftime("%y%m%d-%H%M") ) 
+            inst_id=dbinstance['DBInstanceIdentifier'] 
+            snap_id=( inst_id + "-" + datetime.datetime.now().strftime("%Y%m%d-%H%M") ) 
             print "Processing instance: ", inst_id
             print ">>> creating snapshot ", snap_id
             rdscon.delete_db_instance(
