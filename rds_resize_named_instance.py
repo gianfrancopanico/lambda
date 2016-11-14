@@ -18,7 +18,7 @@ def lambda_handler(event, context):
    status=instance.get('DBInstanceStatus')
   
    if dbidentifier == instance_to_shrink and status == 'available' and dbinstanceclass == size_from:
-      print 'Server '+instance_to_shrink+'is available and ready to be resized'
+      print 'Server '+instance_to_shrink+' is available and ready to be resized'
       response=client.modify_db_instance(
          ApplyImmediately=True, 
          DBInstanceIdentifier=dbidentifier,
