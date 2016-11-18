@@ -25,4 +25,4 @@ def lambda_handler(event, context):
         if kill_me == 1:
             print instance.id +" will be killed";
             ids=[ instance.id ]
-            # postmortem=running_instances.filter(InstanceIds=ids).stop();
+            postmortem=running_instances.filter(InstanceIds=ids).stop();
