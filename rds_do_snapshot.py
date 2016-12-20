@@ -24,7 +24,6 @@ def lambda_handler(event, context):
       snap_status=client.describe_db_snapshots(DBSnapshotIdentifier=snap_id)
       while snap_status['DBSnapshots'][0]['Status'] != 'available':
           print("Snapshot in progress...")
-          time.sleep(5)
+          time.sleep(15)
           snap_status=client.describe_db_snapshots(DBSnapshotIdentifier=snap_id)
       print str(snap_status)
-      
