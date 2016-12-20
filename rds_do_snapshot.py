@@ -23,7 +23,7 @@ def lambda_handler(event, context):
       snapped=client.create_db_snapshot(DBSnapshotIdentifier=snap_id,DBInstanceIdentifier=instance_to_backup)
       snap_status=client.describe_db_snapshots(DBSnapshotIdentifier=snap_id)
       while snap_status['DBSnapshots'][0]['Status'] != 'available':
-          print("Snapshot in progress...")
-          time.sleep(15)
+          print("Snapshot in progress..." + str(snap_status['DBSnapshots'][0]['PercentProgress']))
+          time.sleep(20)
           snap_status=client.describe_db_snapshots(DBSnapshotIdentifier=snap_id)
       print str(snap_status)
