@@ -3,6 +3,9 @@ import string
 import datetime
 import boto3
 
+#put here the AWS account id
+account_id='108652351904'
+
 def lambda_handler(event, context):
     
     rdscon = boto3.client('rds')
@@ -21,13 +24,12 @@ def lambda_handler(event, context):
                 # check tags first 
                 # testing <<< create tag to make snapshot undeleteable 
                 response = rdscon.list_tags_for_resource(
-                    ResourceName='arn:aws:rds:eu-west-1:108652351904:snapshot:'+inst_id,
+                    ResourceName='arn:aws:rds:eu-west-1:'+account_id+':snapshot:'+inst_id,
                     Filters=[]
                     )
                 
                 # requires two tags to be present    
-                mvp=0
-                
+                mvp=0     
                 for tag in response['TagList']:
                    if tag['Key'] == 'write-protected' and tag['Value']=='true':
                        mvp=mvp+1
@@ -36,8 +38,8 @@ def lambda_handler(event, context):
                 
                 # if both tags are present, skip
                 if (mvp >= 2):
-                    print ">>> skipping arn:aws:rds:eu-west-1:108652351904:snapshot:"+inst_id 
+                    print ">>> skipping arn:aws:rds:eu-west-1:"+account_id+":snapshot:"+inst_id 
                 else: 
                     # otherwise exterminate
-                    print "*** deleting arn:aws:rds:eu-west-1:108652351904:snapshot:" + inst_id 
+                    print "*** deleting arn:aws:rds:eu-west-1:"+account_id+":snapshot:" + inst_id 
                     rdscon.delete_db_snapshot(DBSnapshotIdentifier=inst_id)
