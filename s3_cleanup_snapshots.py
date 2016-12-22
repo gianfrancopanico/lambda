@@ -22,13 +22,12 @@ def lambda_handler(event, context):
             
             if snap_date<cut_date:
                 # check tags first 
-                # testing <<< create tag to make snapshot undeleteable 
                 response = rdscon.list_tags_for_resource(
                     ResourceName='arn:aws:rds:eu-west-1:'+account_id+':snapshot:'+inst_id,
                     Filters=[]
                     )
                 
-                # requires two tags to be present    
+                # requires the tags 'write-protected' and 'email' to be present    
                 mvp=0     
                 for tag in response['TagList']:
                    if tag['Key'] == 'write-protected' and tag['Value']=='true':
