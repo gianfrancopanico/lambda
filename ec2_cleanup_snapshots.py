@@ -20,6 +20,10 @@ def lambda_handler(event, context):
     for volsnap in purgeable['Tags']: 
         snap_info=ec2.describe_snapshots(SnapshotIds=[ volsnap['ResourceId'] ]) 
         snap_date=datetime.datetime.strptime(str(snap_info['Snapshots'][0]['StartTime'])[:19], "%Y-%m-%d %H:%M:%S")
-        print volsnap['ResourceId']+" "+str(snap_date)+" "+str(cut_date)
-           
+        
+        if snap_date<cut_date:
+            print "DELETING "+volsnap['ResourceId']+" ("+str(snap_date)[:10]+"<"+str(cut_date)[:10]+")"
+            response = ec2.delete_snapshot(SnapshotId=volsnap['ResourceId'])
+        else: 
+            print "Skipping "+volsnap['ResourceId']+" ("+str(snap_date)[:10]+">"+str(cut_date)[:10]+")"
     return (0)
