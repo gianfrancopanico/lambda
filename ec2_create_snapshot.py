@@ -16,7 +16,8 @@ def lambda_handler(event, context):
       print ("Snapshot "+my_snap+" in progress... "+response['Snapshots'][0]['Progress'])
       time.sleep(20)
       response=client.describe_snapshots(SnapshotIds=[ my_snap ])
-      
+  
+  # mark the snapshot "Purgeable" so it can be cleaned by the other script
   client.create_tags(Resources=[ my_snap ], Tags=[ { 'Key': 'Purgeable', 'Value': 'True' } ] ) 
   print ("Snapshot "+my_snap+" completed and tagged successfully")
   return (0)
